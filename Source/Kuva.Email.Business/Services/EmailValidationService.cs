@@ -13,63 +13,10 @@ public sealed class EmailValidationService : IEmailValidationService
     {
         var result = EmailValidationResult.Success();
 
-        if (string.IsNullOrWhiteSpace(request.TemplateCode))
-        {
-            result.Errors.Add("TemplateCode is required.");
-        }
-        else if (request.TemplateCode.Length > EmailConstants.MaxTemplateCodeLength)
-        {
-            result.Errors.Add("TemplateCode is too long.");
-        }
-
-        if (!Enum.IsDefined(request.Priority))
-        {
-            result.Errors.Add("Priority is invalid.");
-        }
-
-        if (request.Recipients is null || request.Recipients.Count == 0)
-        {
-            result.Errors.Add("At least one recipient is required.");
-        }
-        else if (request.Recipients.Count > EmailConstants.MaxRecipients)
-        {
-            result.Errors.Add($"Recipients cannot exceed {EmailConstants.MaxRecipients}.");
-        }
-        else
-        {
-            if (!request.Recipients.Any(x => x.Type.Equals("To", StringComparison.OrdinalIgnoreCase)))
-            {
-                result.Errors.Add("At least one To recipient is required.");
-            }
-
-            foreach (var recipient in request.Recipients)
-            {
-                if (!EmailAddress.IsValid(recipient.Email))
-                {
-                    result.Errors.Add($"Recipient email is invalid: {recipient.Email}");
-                }
-
-                if (!EmailConstants.AllowedRecipientTypes.Contains(recipient.Type, StringComparer.OrdinalIgnoreCase))
-                {
-                    result.Errors.Add($"Recipient type is invalid: {recipient.Type}");
-                }
-            }
-        }
-
-        if (request.Variables is null)
-        {
-            result.Errors.Add("Variables cannot be null.");
-        }
-        else
-        {
-            foreach (var variable in request.Variables)
-            {
-                if (variable.Value is not null && variable.Value.Length > EmailConstants.MaxVariableValueLength)
-                {
-                    result.Errors.Add($"Variable value is too long: {variable.Key}");
-                }
-            }
-        }
+        ValidateTemplateCode(request.TemplateCode, result);
+        ValidatePriority(request.Priority, result);
+        ValidateRecipients(request.Recipients, result);
+        ValidateVariables(request.Variables, result);
 
         return result;
     }
@@ -104,5 +51,80 @@ public sealed class EmailValidationService : IEmailValidationService
         }
 
         return result;
+    }
+
+    private void ValidateTemplateCode(string templateCode, EmailValidationResult result)
+    {
+        if (string.IsNullOrWhiteSpace(templateCode))
+        {
+            result.Errors.Add("TemplateCode is required.");
+        }
+        else if (templateCode.Length > EmailConstants.MaxTemplateCodeLength)
+        {
+            result.Errors.Add("TemplateCode is too long.");
+        }
+    }
+
+    private static void ValidatePriority(EmailPriority priority, EmailValidationResult result)
+    {
+        if (!Enum.IsDefined(priority))
+        {
+            result.Errors.Add("Priority is invalid.");
+        }
+    }
+
+    private void ValidateRecipients(List<EmailRecipientDto> recipients, EmailValidationResult result)
+    {
+        if (recipients is null || recipients.Count == 0)
+        {
+            result.Errors.Add("At least one recipient is required.");
+            return;
+        }
+
+        if (recipients.Count > EmailConstants.MaxRecipients)
+        {
+            result.Errors.Add($"Recipients cannot exceed {EmailConstants.MaxRecipients}.");
+            return;
+        }
+
+        if (!recipients.Any(x => x.Type.Equals("To", StringComparison.OrdinalIgnoreCase)))
+        {
+            result.Errors.Add("At least one To recipient is required.");
+        }
+
+        foreach (var recipient in recipients)
+        {
+            ValidateRecipient(recipient, result);
+        }
+    }
+
+    private void ValidateRecipient(EmailRecipientDto recipient, EmailValidationResult result)
+    {
+        if (!EmailAddress.IsValid(recipient.Email))
+        {
+            result.Errors.Add($"Recipient email is invalid: {recipient.Email}");
+        }
+
+        if (!EmailConstants.AllowedRecipientTypes.Contains(recipient.Type, StringComparer.OrdinalIgnoreCase))
+        {
+            result.Errors.Add($"Recipient type is invalid: {recipient.Type}");
+        }
+    }
+
+    private void ValidateVariables(Dictionary<string, string> variables, EmailValidationResult result)
+    {
+        if (variables is null)
+        {
+            result.Errors.Add("Variables cannot be null.");
+            return;
+        }
+
+        foreach (var variable in variables)
+        {
+            if (variable.Value is not null && variable.Value.Length > EmailConstants.MaxVariableValueLength)
+            {
+                result.Errors.Add($"Variable value is too long: {variable.Key}");
+            }
+        }
     }
 }

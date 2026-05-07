@@ -1,7 +1,7 @@
 using Kuva.Email.Business.Interfaces;
 using Kuva.Email.Business.Providers;
 using Kuva.Email.Business.Services;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection; 
 
 namespace Kuva.Email.Business.Extensions;
 

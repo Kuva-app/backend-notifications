@@ -46,7 +46,7 @@ public static class ServiceCollectionExtensions
         services.AddAuthorization();
         services.AddKuvaSwagger();
         services.AddEmailRepository(configuration);
-        services.AddEmailBusiness();
+        BusinessDependencyInjection.AddEmailBusiness();
         services.AddKuvaObservability();
 
         return services;

@@ -9,6 +9,4 @@ var app = builder.Build();
 
 app.UseKuvaEmailPipeline();
 
-app.Run();
-
-public partial class Program;
+await app.RunAsync();
