@@ -9,6 +9,7 @@ public static class BusinessDependencyInjection
 {
     public static IServiceCollection AddEmailBusiness(this IServiceCollection services)
     {
+        services.AddScoped<IEmailDataAccess, EmailDataAccess>();
         services.AddScoped<IEmailBusiness, EmailBusiness>();
         services.AddSingleton<ITemplateRenderer, TemplateRenderer>();
         services.AddSingleton<IEmailValidationService, EmailValidationService>();

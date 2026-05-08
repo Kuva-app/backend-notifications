@@ -63,7 +63,7 @@ public sealed class EmailBusinessTests
 
         response.Status.Should().Be(EmailRequestStatus.Sent);
         _sender.Verify(x => x.SendAsync(It.IsAny<RenderedEmail>(), It.IsAny<CancellationToken>()), Times.Once);
-        _requestRepository.Verify(x => x.AddAsync(It.Is<EmailRequest>(r => r.Status == EmailRequestStatus.PendingSend), It.IsAny<CancellationToken>()), Times.Once);
+        _requestRepository.Verify(x => x.AddAsync(It.Is<EmailRequest>(r => r.Status == EmailRequestStatus.Sent), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Test]

@@ -6,13 +6,13 @@ namespace Kuva.Email.Business.Interfaces;
 
 public interface IEmailDataAccess
 {
-    IEmailTemplateRepository templateRepository { get; }
-    IEmailRequestRepository requestRepository { get; }
-    IUnitOfWork unitOfWork { get; }
-    ITemplateRenderer templateRenderer { get; }
-    IEmailValidationService validationService { get; }
-    IEmailProviderFactory providerFactory { get; }
-    IClock clock { get; }
-    IEmailMetrics metrics { get; }
-    ILogger<EmailBusiness> logger { get; }
+    IEmailTemplateRepository TemplateRepository { get; }
+    IEmailRequestRepository RequestRepository { get; }
+    IUnitOfWork UnitOfWork { get; }
+    ITemplateRenderer TemplateRenderer { get; }
+    IEmailValidationService ValidationService { get; }
+    IEmailProviderFactory ProviderFactory { get; }
+    IClock Clock { get; }
+    IEmailMetrics Metrics { get; }
+    ILogger<EmailBusiness> Logger { get; }
 }
