@@ -13,7 +13,7 @@ COPY Source/Kuva.Email.Business/*.csproj Source/Kuva.Email.Business/
 COPY Source/Kuva.Email.Service/*.csproj Source/Kuva.Email.Service/
 COPY Source/Kuva.Email.EFMigrations/*.csproj Source/Kuva.Email.EFMigrations/
 
-RUN dotnet restore Source/Kuva.Email.sln
+RUN dotnet restore Source/Kuva.Email.Service/Kuva.Email.Service.csproj
 
 COPY . .
 WORKDIR /src/Source/Kuva.Email.Service
