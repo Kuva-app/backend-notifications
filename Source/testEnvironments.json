@@ -2,7 +2,7 @@
   "local": {
     "serviceUrl": "http://localhost:8080",
     "sqlServer": "localhost,1433",
-    "database": "KuvaEmail",
+    "database": "KuvaNotifications",
     "provider": "Fake"
   }
 }

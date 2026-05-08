@@ -17,10 +17,10 @@ concurrency:
 
 env:
   DOTNET_VERSION: 10.0.x
-  SOLUTION_PATH: Source/Kuva.Email.sln
-  DOCKERFILE_PATH: Source/Kuva.Email.Service/Dockerfile
+  SOLUTION_PATH: Source/Kuva.Notifications.sln
+  DOCKERFILE_PATH: Source/Kuva.Notifications.Service/Dockerfile
   TEST_RESULTS_DIR: TestResults
-  IMAGE_NAME: kuva-email-service
+  IMAGE_NAME: kuva-notifications-service
 
 jobs:
   build-test-quality:
@@ -80,13 +80,14 @@ jobs:
         run: dotnet restore "${SOLUTION_PATH}"
 
       - name: Build
-        run: dotnet build "${SOLUTION_PATH}" --configuration Release --no-restore -p:ContinuousIntegrationBuild=true
+        run: dotnet build "${SOLUTION_PATH}" --configuration Release --no-restore -m:1 -p:ContinuousIntegrationBuild=true
 
       - name: Test with coverage
         run: |
           dotnet test "${SOLUTION_PATH}" \
             --configuration Release \
             --no-build \
+            -m:1 \
             --logger "trx;LogFileName=test-results.trx" \
             --results-directory "${TEST_RESULTS_DIR}" \
             --collect:"XPlat Code Coverage" \

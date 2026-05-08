@@ -1,20 +1,20 @@
 groups:
-  - name: kuva-email-alerts
+  - name: kuva-notifications-alerts
     rules:
-      - alert: HighEmailFailureRate
-        expr: rate(kuva_email_failed_total[5m]) > 0.1
+      - alert: HighNotificationFailureRate
+        expr: rate(kuva_notifications_failed_total[5m]) > 0.1
         for: 5m
         labels:
           severity: warning
         annotations:
-          summary: "Alta taxa de falha no envio de e-mails"
-          description: "O microservico Kuva.Email esta apresentando falhas acima do esperado."
+          summary: "Alta taxa de falha no envio de notificacoes"
+          description: "O microservico Kuva.Notifications esta apresentando falhas acima do esperado."
 
-      - alert: EmailServiceDown
-        expr: up{job="kuva-email-service"} == 0
+      - alert: NotificationsServiceDown
+        expr: up{job="kuva-notifications-service"} == 0
         for: 1m
         labels:
           severity: critical
         annotations:
-          summary: "Kuva.Email indisponivel"
-          description: "Prometheus nao consegue coletar metricas do Kuva.Email."
+          summary: "Kuva.Notifications indisponivel"
+          description: "Prometheus nao consegue coletar metricas do Kuva.Notifications."
