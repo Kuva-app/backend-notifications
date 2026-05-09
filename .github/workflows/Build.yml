@@ -1,10 +1,6 @@
 name: Build, Test and Analyze
 
 on:
-  push:
-    branches:
-      - '**'
-      - '!master'
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -41,19 +37,19 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Restore
-        run: dotnet restore "${SOLUTION_PATH}"
+        run: dotnet restore "${{ env.SOLUTION_PATH }}"
 
       - name: Build
-        run: dotnet build "${SOLUTION_PATH}" --configuration Release --no-restore -m:1 -p:ContinuousIntegrationBuild=true
+        run: dotnet build "${{ env.SOLUTION_PATH }}" --configuration Release --no-restore -m:1 -p:ContinuousIntegrationBuild=true
 
       - name: Test with coverage
         run: |
-          dotnet test "${SOLUTION_PATH}" \
+          dotnet test "${{ env.SOLUTION_PATH }}" \
             --configuration Release \
             --no-build \
             -m:1 \
             --logger "trx;LogFileName=test-results.trx" \
-            --results-directory "${TEST_RESULTS_DIR}" \
+            --results-directory "${{ env.TEST_RESULTS_DIR }}" \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
@@ -86,7 +82,7 @@ jobs:
         run: |
           ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"Kuva-app_backend-notifications" /o:"kuva-app" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
           dotnet build
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="$SONAR_TOKEN"
 
       - name: Finish SonarQube analysis
         env:
