@@ -55,3 +55,16 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+FEATURES.md
+
+#VS
+.vs
+.fake
+
+# VSCODE
+.vscode
+
+# JetBrains Rider
+.idea/
+*.DotSettings.user

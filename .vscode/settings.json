@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "kuva-app",
+        "projectKey": "Kuva-app_backend-notifications"
+    }
+}

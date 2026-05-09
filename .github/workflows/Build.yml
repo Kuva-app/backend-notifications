@@ -1,0 +1,19 @@
+name: Build, Test and Analyze
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+  checks: write
+
+jobs:
+  quality-gate:
+    uses: Kuva-app/kuva-ci/.github/workflows/quality-gate-pr-dotnet.yml@master
+    with:
+      DOTNET_VERSION: 10.0.x
+      SOLUTION_PATH: Source/Kuva.Notifications.sln
+      SOLUTION_KEY: Kuva-app_backend-notifications
+    secrets: inherit

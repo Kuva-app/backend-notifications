@@ -1,0 +1,33 @@
+@Kuva.Notifications.Service_HostAddress = http://localhost:8080
+
+POST {{Kuva.Notifications.Service_HostAddress}}/api/v1/notifications/send
+Content-Type: application/json
+
+{
+  "type": "Email",
+  "templateId": "7a40f1f4-5e62-4427-90c0-b89ac3cd0002",
+  "externalReference": "order-123",
+  "source": "Kuva.Orders",
+  "priority": "Normal",
+  "recipients": [
+    {
+      "address": "cliente@email.com",
+      "name": "Cliente Kuva",
+      "role": "To"
+    }
+  ],
+  "variables": {
+    "customerName": "Cliente Kuva",
+    "orderNumber": "123",
+    "storeName": "Loja Piloto"
+  },
+  "metadata": {
+    "orderId": "123",
+    "storeId": "456"
+  }
+}
+
+###
+
+GET {{Kuva.Notifications.Service_HostAddress}}/health
+Accept: application/json

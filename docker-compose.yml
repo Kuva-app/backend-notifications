@@ -1,0 +1,38 @@
+services:
+  kuva-notifications-service:
+    build:
+      context: .
+      dockerfile: Source/Kuva.Notifications.Service/Dockerfile
+    container_name: kuva-notifications-service
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__NotificationsDatabase: "Server=sqlserver;Database=KuvaNotifications;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;"
+      Notifications__Provider: Fake
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: kuva-notifications-sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "${SA_PASSWORD}"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: kuva-notifications-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert_rules.yml:/etc/prometheus/alert_rules.yml
+
+volumes:
+  sqlserver_data:
