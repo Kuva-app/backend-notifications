@@ -45,7 +45,6 @@ jobs:
       - name: Test with coverage
         run: |
           dotnet test "${{ env.SOLUTION_PATH }}" \
-            --configuration Release \
             --no-build \
             -m:1 \
             --logger "trx;LogFileName=test-results.trx" \
