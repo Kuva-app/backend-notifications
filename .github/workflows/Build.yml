@@ -44,14 +44,7 @@ jobs:
 
       - name: Test with coverage
         run: |
-          dotnet test "${{ env.SOLUTION_PATH }}" \
-            --no-build \
-            -m:1 \
-            --logger "trx;LogFileName=test-results.trx" \
-            --results-directory "${{ env.TEST_RESULTS_DIR }}" \
-            --collect:"XPlat Code Coverage" \
-            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-
+          dotnet test "${{ env.SOLUTION_PATH }}" --no-build -m:1 --logger "trx;LogFileName=test-results.trx" --results-directory "${{ env.TEST_RESULTS_DIR }}" --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Cache SonarQube Cloud packages
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
