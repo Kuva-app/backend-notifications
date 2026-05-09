@@ -22,6 +22,9 @@ jobs:
   deploy:
     uses: Kuva-app/kuva-ci/.github/workflows/deploy-default-dotnet.yml@3b22ab376ce8ac1bca19f957d5f7b79c7f3d936d
     needs: quality-gate
+    permissions:
+      id-token: write
+      contents: read
     with:
       DOCKERFILE_PATH: ./Dockerfile
       IMAGE_NAME: kuva-notifications-service
