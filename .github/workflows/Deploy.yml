@@ -10,100 +10,20 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  DOTNET_VERSION: 10.0.x
-  SOLUTION_PATH: Source/Kuva.Notifications.sln
-  DOCKERFILE_PATH: Source/Kuva.Notifications.Service/Dockerfile
-  TEST_RESULTS_DIR: TestResults
-  IMAGE_NAME: kuva-notifications-service
-
 jobs:
-  build-test-quality:
-    name: Build, Test and Quality Gate
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Setup Java for SonarQube
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Install SonarQube scanner
-        run: |
-          dotnet tool install --global dotnet-sonarscanner
-          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
-
-      - name: Start SonarQube analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: "Kuva-app_backend-notifications"
-        run: |
-          dotnet sonarscanner begin \
-            /k:"${SONAR_PROJECT_KEY}" \
-            /d:sonar.token="${SONAR_TOKEN}" \
-            /d:sonar.qualitygate.wait=true \
-            /d:sonar.qualitygate.timeout=300 \
-            "/d:sonar.cs.opencover.reportsPaths=${TEST_RESULTS_DIR}/**/coverage.opencover.xml" \
-            "/d:sonar.coverage.exclusions=**/*Tests.cs,**/Migrations/**,**/Program.cs"
-
-      - name: Restore
-        run: dotnet restore "${SOLUTION_PATH}"
-
-      - name: Build
-        run: dotnet build "${SOLUTION_PATH}" --configuration Release --no-restore -m:1 -p:ContinuousIntegrationBuild=true
-
-      - name: Test with coverage
-        run: |
-          dotnet test "${SOLUTION_PATH}" \
-            --configuration Release \
-            --no-build \
-            -m:1 \
-            --logger "trx;LogFileName=test-results.trx" \
-            --results-directory "${TEST_RESULTS_DIR}" \
-            --collect:"XPlat Code Coverage" \
-            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-
-      - name: Finish SonarQube analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet sonarscanner end /d:sonar.token="${SONAR_TOKEN}"
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: ${{ env.TEST_RESULTS_DIR }}
-          if-no-files-found: ignore
+  quality-gate:
+    uses: Kuva-app/kuva-ci/.github/workflows/quality-gate-pr-dotnet.yml@master
+    with:
+      DOTNET_VERSION: 10.0.x
+      SOLUTION_PATH: Source/Kuva.Notifications.sln
+      SOLUTION_KEY: Kuva-app_backend-notifications
+    secrets: inherit
 
   container-build:
     name: Validate Container Build
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    needs: build-test-quality
+    needs: quality-gate
     if: github.event_name != 'push' || github.ref != 'refs/heads/master'
 
     permissions:
@@ -130,7 +50,7 @@ jobs:
     name: Publish Image to Azure Container Registry
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    needs: build-test-quality
+    needs: quality-gate
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     environment: production
 
