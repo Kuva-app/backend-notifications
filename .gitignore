@@ -61,3 +61,10 @@ FEATURES.md
 #VS
 .vs
 .fake
+
+# VSCODE
+.vscode
+
+# JetBrains Rider
+.idea/
+*.DotSettings.user
