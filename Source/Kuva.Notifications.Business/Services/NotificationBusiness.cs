@@ -15,29 +15,6 @@ public sealed class NotificationBusiness(INotificationDataAccess notificationDat
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
     private static readonly TimeSpan IdempotencyWindow = TimeSpan.FromHours(24);
 
-    public NotificationBusiness(
-        INotificationTemplateRepository templateRepository,
-        INotificationRequestRepository requestRepository,
-        IUnitOfWork unitOfWork,
-        ITemplateRenderer templateRenderer,
-        INotificationValidationService validationService,
-        INotificationProviderFactory providerFactory,
-        IClock clock,
-        INotificationMetrics metrics,
-        ILogger<NotificationBusiness> logger)
-        : this(new NotificationDataAccess(
-            templateRepository,
-            requestRepository,
-            unitOfWork,
-            templateRenderer,
-            validationService,
-            providerFactory,
-            clock,
-            metrics,
-            logger))
-    {
-    }
-
     public async Task<SendNotificationResponseDto> SendAsync(SendNotificationRequestDto request, CancellationToken cancellationToken)
     {
         notificationDataAccess.Metrics.RequestReceived();

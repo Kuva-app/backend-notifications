@@ -1,18 +1,18 @@
 services:
-  kuva-notifications-service:
-    build:
-      context: .
-      dockerfile: Source/Kuva.Notifications.Service/Dockerfile
-    container_name: kuva-notifications-service
-    ports:
-      - "8080:8080"
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__NotificationsDatabase: "Server=sqlserver;Database=KuvaNotifications;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;"
-      Notifications__Provider: Fake
-    depends_on:
-      - sqlserver
+  # kuva-notifications-service:
+  #   build:
+  #     context: .
+  #     dockerfile: Source/Kuva.Notifications.Service/Dockerfile
+  #   container_name: kuva-notifications-service
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     ASPNETCORE_ENVIRONMENT: Development
+  #     ASPNETCORE_URLS: http://+:8080
+  #     ConnectionStrings__NotificationsDatabase: "Server=sqlserver;Database=KuvaNotifications;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;"
+  #     Notifications__Provider: Fake
+  #   depends_on:
+  #     - sqlserver
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest

@@ -4,6 +4,8 @@ Microservico transacional de notificacoes do ecossistema Kuva. Ele recebe pedido
 
 ## Arquitetura
 
+![arquitetura](https://github.com/Kuva-app/docs/blob/master/kuva-arquitetura-mvp.drawio.png?raw=true)
+
 ```text
 Kuva.Notifications.Service -> Kuva.Notifications.Business -> Kuva.Notifications.Repository -> SQL Server
                                   |
@@ -40,6 +42,11 @@ Com Docker Compose:
 
 ```bash
 export SA_PASSWORD='Change_this_password_123!'
+docker compose up --build
+```
+
+```powershell
+$env:SA_PASSWORD = "Change_this_password_123!"
 docker compose up --build
 ```
 
