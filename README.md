@@ -10,7 +10,7 @@ Kuva.Notifications.Service -> Kuva.Notifications.Business -> Kuva.Notifications.
                                   -> canais/providers (Email via Fake, SMTP ou SendGrid no MVP)
 ```
 
-Projetos:
+Projetos: 
 
 - `Source/Kuva.Notifications.Entities`: entidades, enums, DTOs e value objects.
 - `Source/Kuva.Notifications.Repository`: EF Core, Fluent API, repositorios e Unit of Work.
