@@ -1,9 +1,6 @@
-name: CI/CD
+name: Deploy to Azure Container Registry
 
 on:
-  pull_request:
-    branches:
-      - master
   push:
     branches:
       - master
@@ -23,7 +20,7 @@ env:
 jobs:
   build-test-quality:
     name: Build, Test and Quality Gate
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 30
 
     permissions:
@@ -54,37 +51,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Cache SonarQube Cloud packages
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
-        with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Cache SonarQube Cloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
-        with:
-          path: ${{ runner.temp }}\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
-
-      - name: Install SonarQube Cloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: powershell
+      - name: Install SonarQube scanner
         run: |
-          New-Item -Path ${{ runner.temp }}\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path ${{ runner.temp }}\scanner
+          dotnet tool install --global dotnet-sonarscanner
+          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
 
       - name: Start SonarQube analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_PROJECT_KEY: "Kuva-app_backend-notifications"
-        shell: powershell
         run: |
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"$SONAR_PROJECT_KEY" /o:"kuva-app" /d:sonar.token="$SONAR_TOKEN"
-          dotnet build
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+          dotnet sonarscanner begin \
+            /k:"${SONAR_PROJECT_KEY}" \
+            /d:sonar.token="${SONAR_TOKEN}" \
+            /d:sonar.qualitygate.wait=true \
+            /d:sonar.qualitygate.timeout=300 \
+            "/d:sonar.cs.opencover.reportsPaths=${TEST_RESULTS_DIR}/**/coverage.opencover.xml" \
+            "/d:sonar.coverage.exclusions=**/*Tests.cs,**/Migrations/**,**/Program.cs"
 
       - name: Restore
         run: dotnet restore "${SOLUTION_PATH}"
