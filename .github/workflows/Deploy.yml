@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   quality-gate:
-    uses: Kuva-app/kuva-ci/.github/workflows/quality-gate-pr-dotnet.yml@3b22ab376ce8ac1bca19f957d5f7b79c7f3d936d
+    uses: Kuva-app/kuva-ci/.github/workflows/quality-gate-pr-dotnet.yml@901c713cfa2a608170de64cd76aa0df3d2f63863
     with:
       DOTNET_VERSION: 10.0.x
       SOLUTION_PATH: Source/Kuva.Notifications.sln
@@ -20,7 +20,7 @@ jobs:
     secrets: inherit
 
   deploy:
-    uses: Kuva-app/kuva-ci/.github/workflows/deploy-default-dotnet.yml@3b22ab376ce8ac1bca19f957d5f7b79c7f3d936d
+    uses: Kuva-app/kuva-ci/.github/workflows/deploy-default-dotnet.yml@901c713cfa2a608170de64cd76aa0df3d2f63863
     needs: quality-gate
     permissions:
       id-token: write

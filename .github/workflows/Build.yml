@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   quality-gate:
-    uses: Kuva-app/kuva-ci/.github/workflows/quality-gate-pr-dotnet.yml@master
+    uses: Kuva-app/kuva-ci/.github/workflows/quality-gate-pr-dotnet.yml@901c713cfa2a608170de64cd76aa0df3d2f63863
     with:
       DOTNET_VERSION: 10.0.x
       SOLUTION_PATH: Source/Kuva.Notifications.sln
