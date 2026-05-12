@@ -5,7 +5,6 @@ using Kuva.Notifications.Business.Models;
 using Kuva.Notifications.Entities.Dtos;
 using Kuva.Notifications.Entities.Entities;
 using Kuva.Notifications.Entities.Enums;
-using Kuva.Notifications.Repository.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Kuva.Notifications.Business.Services;
@@ -172,7 +171,7 @@ public sealed class NotificationBusiness(INotificationDataAccess notificationDat
     public async Task<NotificationTemplateDto?> UpdateTemplateAsync(Guid id, NotificationTemplateDto template, CancellationToken cancellationToken)
     {   
         var entity = await notificationDataAccess.TemplateRepository.GetByIdAsync(id, cancellationToken);
-        if (entity is null)
+        if (entity is null || !entity.IsActive)
         {
             return null;
         }

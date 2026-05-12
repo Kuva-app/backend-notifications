@@ -21,7 +21,7 @@ public sealed class NotificationTemplateRepository(NotificationsDbContext dbCont
 
     public Task<NotificationTemplate?> GetByCodeAsync(string code, CancellationToken cancellationToken)
         => dbContext.NotificationTemplates
-            .Where(x => x.Code == code)
+            .Where(x => x.Code == code && x.IsActive)
             .OrderByDescending(x => x.Version)
             .FirstOrDefaultAsync(cancellationToken);
 
