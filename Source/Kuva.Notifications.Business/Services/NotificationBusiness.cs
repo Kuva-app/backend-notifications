@@ -92,7 +92,8 @@ public sealed class NotificationBusiness(INotificationDataAccess notificationDat
         try
         {
             selectedProvider = await notificationDataAccess.ProviderFactory.GetActiveProviderAsync(request.Type, cancellationToken);
-            notificationRequest.Events.Add(CreateEvent(notificationRequest.Id, NotificationEventType.SendStarted, selectedProvider.Provider.Name, null));
+            await notificationDataAccess.RequestRepository.AddEventAsync(CreateEvent(notificationRequest.Id, NotificationEventType.SendStarted, selectedProvider.Provider.Name, null), cancellationToken);
+            await notificationDataAccess.UnitOfWork.SaveChangesAsync(cancellationToken);
             notificationDataAccess.Logger.LogInformation("Sending notification request {NotificationRequestId} using provider {Provider}.", notificationRequest.Id, selectedProvider.Provider.Name);
             sendResult = await selectedProvider.Sender.SendAsync(renderedNotification, cancellationToken);
         }
@@ -108,12 +109,11 @@ public sealed class NotificationBusiness(INotificationDataAccess notificationDat
 
         var finalStatus = sendResult.Success ? NotificationRequestStatus.Sent : NotificationRequestStatus.Failed;
         var safeError = sendResult.Success ? null : Sanitize(sendResult.ErrorMessage ?? "Notification send failed.");
-        notificationRequest.Status = finalStatus;
-        notificationRequest.ErrorMessage = safeError;
-        notificationRequest.UpdatedAtUtc = notificationDataAccess.Clock.UtcNow;
-        notificationRequest.SentAtUtc = sendResult.Success ? notificationDataAccess.Clock.UtcNow : null;
+        var now = notificationDataAccess.Clock.UtcNow;
 
-        notificationRequest.Attempts.Add(new NotificationSendAttempt
+        await notificationDataAccess.RequestRepository.UpdateStatusAsync(notificationRequest.Id, finalStatus, safeError, now, cancellationToken);
+
+        await notificationDataAccess.RequestRepository.AddAttemptAsync(new NotificationSendAttempt
         {
             Id = Guid.NewGuid(),
             NotificationRequestId = notificationRequest.Id,
@@ -124,14 +124,14 @@ public sealed class NotificationBusiness(INotificationDataAccess notificationDat
             ErrorCode = sendResult.ErrorCode,
             ErrorMessage = safeError,
             StartedAtUtc = startedAtUtc,
-            FinishedAtUtc = notificationDataAccess.Clock.UtcNow
-        });
+            FinishedAtUtc = now
+        }, cancellationToken);
 
-        notificationRequest.Events.Add(CreateEvent(
+        await notificationDataAccess.RequestRepository.AddEventAsync(CreateEvent(
             notificationRequest.Id,
             sendResult.Success ? NotificationEventType.SendSucceeded : NotificationEventType.SendFailed,
             sendResult.Success ? "Notification sent successfully." : safeError,
-            null));
+            null), cancellationToken);
 
         await notificationDataAccess.UnitOfWork.SaveChangesAsync(cancellationToken);
 

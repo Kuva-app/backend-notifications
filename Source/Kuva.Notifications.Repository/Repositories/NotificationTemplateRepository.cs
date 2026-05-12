@@ -16,6 +16,7 @@ public sealed class NotificationTemplateRepository(NotificationsDbContext dbCont
 
     public Task<NotificationTemplate?> GetActiveByIdAsync(Guid id, NotificationType type, CancellationToken cancellationToken)
         => dbContext.NotificationTemplates
+            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id && x.Type == type && x.IsActive, cancellationToken);
 
     public Task<NotificationTemplate?> GetByCodeAsync(string code, CancellationToken cancellationToken)
