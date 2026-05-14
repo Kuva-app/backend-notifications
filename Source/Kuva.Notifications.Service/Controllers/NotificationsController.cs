@@ -24,7 +24,7 @@ public sealed class NotificationsController(INotificationBusiness notificationBu
             NotificationRequestStatus.InvalidVariables => BadRequest(ToError("InvalidVariables", response.Message)),
             NotificationRequestStatus.TemplateNotFound => NotFound(ToError("TemplateNotFound", response.Message)),
             NotificationRequestStatus.Failed => StatusCode(StatusCodes.Status502BadGateway, ToError("NotificationSendFailed", response.Message)),
-            _ => AcceptedAtAction(nameof(GetStatusAsync), new { id = response.Id }, response)
+            NotificationRequestStatus.Sent => Accepted(response)
         };
     }
 

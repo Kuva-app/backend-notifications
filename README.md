@@ -4,6 +4,8 @@ Microservico transacional de notificacoes do ecossistema Kuva. Ele recebe pedido
 
 ## Arquitetura
 
+![arquitetura](https://github.com/Kuva-app/docs/blob/master/kuva-arquitetura-mvp.drawio.png?raw=true)
+
 ```text
 Kuva.Notifications.Service -> Kuva.Notifications.Business -> Kuva.Notifications.Repository -> SQL Server
                                   |
@@ -38,8 +40,17 @@ docker compose up --build
 
 Com Docker Compose:
 
+**bash**
+
 ```bash
 export SA_PASSWORD='Change_this_password_123!'
+docker compose up --build
+```
+
+**powershell**
+
+```powershell
+$env:SA_PASSWORD = "Change_this_password_123!"
 docker compose up --build
 ```
 
@@ -83,6 +94,8 @@ ApplicationInsights--ConnectionString
 
 ## Migrations
 
+**bash**
+
 ```bash
 dotnet ef migrations add InitialCreate \
   --project Source/Kuva.Notifications.EFMigrations \
@@ -92,6 +105,20 @@ dotnet ef migrations add InitialCreate \
 dotnet ef database update \
   --project Source/Kuva.Notifications.EFMigrations \
   --startup-project Source/Kuva.Notifications.Service \
+  --context NotificationsDbContext
+```
+
+**powershell**
+
+```powershell
+dotnet ef migrations add InitialCreate `
+  --project .\Source\Kuva.Notifications.EFMigrations `
+  --startup-project .\Source\Kuva.Notifications.Service `
+  --context NotificationsDbContext
+
+dotnet ef database update `
+  --project .\Source\Kuva.Notifications.EFMigrations `
+  --startup-project .\Source\Kuva.Notifications.Service `
   --context NotificationsDbContext
 ```
 

@@ -10,10 +10,13 @@ public sealed class NotificationProviderRepository(NotificationsDbContext dbCont
 {
     public Task<NotificationProvider?> GetActiveByPriorityAsync(NotificationType type, CancellationToken cancellationToken)
         => dbContext.NotificationProviders
+            .AsNoTracking()
             .Where(x => x.Type == type && x.IsActive)
             .OrderBy(x => x.Priority)
             .FirstOrDefaultAsync(cancellationToken);
 
     public Task<NotificationProvider?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-        => dbContext.NotificationProviders.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        => dbContext.NotificationProviders
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 }

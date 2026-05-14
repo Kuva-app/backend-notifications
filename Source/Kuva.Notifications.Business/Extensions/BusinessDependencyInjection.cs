@@ -17,9 +17,10 @@ public static class BusinessDependencyInjection
         services.AddSingleton<IClock, SystemClock>();
         services.AddSingleton<INotificationMetrics, NoopNotificationMetrics>();
 
-        services.AddScoped<INotificationSender, FakeEmailSender>();
-        services.AddScoped<INotificationSender, SmtpEmailSender>();
+        services.AddTransient<INotificationSender, FakeEmailSender>();
+        services.AddTransient<INotificationSender, SmtpEmailSender>();
         services.AddHttpClient<INotificationSender, SendGridEmailSender>();
+        services.AddTransient<INotificationSender, MailKitSender>();
 
         return services;
     }

@@ -1,18 +1,20 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11806.211 stable
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F75556}") = "Kuva.Notifications.Entities", "Kuva.Notifications.Entities\Kuva.Notifications.Entities.csproj", "{A0283F16-8EE4-4B4C-BF96-23E83CB17B17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kuva.Notifications.Entities", "Kuva.Notifications.Entities\Kuva.Notifications.Entities.csproj", "{A0283F16-8EE4-4B4C-BF96-23E83CB17B17}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F75556}") = "Kuva.Notifications.Repository", "Kuva.Notifications.Repository\Kuva.Notifications.Repository.csproj", "{561BD8F8-D466-4C60-827A-62035E203C9E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kuva.Notifications.Repository", "Kuva.Notifications.Repository\Kuva.Notifications.Repository.csproj", "{561BD8F8-D466-4C60-827A-62035E203C9E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F75556}") = "Kuva.Notifications.Business", "Kuva.Notifications.Business\Kuva.Notifications.Business.csproj", "{E7B369B6-8316-47D3-BF64-BA559F2C9AF7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kuva.Notifications.Business", "Kuva.Notifications.Business\Kuva.Notifications.Business.csproj", "{E7B369B6-8316-47D3-BF64-BA559F2C9AF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F75556}") = "Kuva.Notifications.Service", "Kuva.Notifications.Service\Kuva.Notifications.Service.csproj", "{31047FB4-7C88-45E0-993C-7E9BBE28367D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kuva.Notifications.Service", "Kuva.Notifications.Service\Kuva.Notifications.Service.csproj", "{31047FB4-7C88-45E0-993C-7E9BBE28367D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F75556}") = "Kuva.Notifications.EFMigrations", "Kuva.Notifications.EFMigrations\Kuva.Notifications.EFMigrations.csproj", "{944A23A1-FE42-4C29-82AC-28DF34A4D8D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kuva.Notifications.EFMigrations", "Kuva.Notifications.EFMigrations\Kuva.Notifications.EFMigrations.csproj", "{944A23A1-FE42-4C29-82AC-28DF34A4D8D1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F75556}") = "Kuva.Notifications.Tests", "Kuva.Notifications.Tests\Kuva.Notifications.Tests.csproj", "{933A91BF-E2C1-4FD6-9AEF-0B274CF745A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kuva.Notifications.Tests", "Kuva.Notifications.Tests\Kuva.Notifications.Tests.csproj", "{933A91BF-E2C1-4FD6-9AEF-0B274CF745A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kuva.Notifications.EFMigrations.UnitTests", "Kuva.Notifications.EFMigrations.UnitTests\Kuva.Notifications.EFMigrations.UnitTests.csproj", "{C387E45A-F25A-48D5-AD5B-A102DF6BFF0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{933A91BF-E2C1-4FD6-9AEF-0B274CF745A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{933A91BF-E2C1-4FD6-9AEF-0B274CF745A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{933A91BF-E2C1-4FD6-9AEF-0B274CF745A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C387E45A-F25A-48D5-AD5B-A102DF6BFF0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C387E45A-F25A-48D5-AD5B-A102DF6BFF0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C387E45A-F25A-48D5-AD5B-A102DF6BFF0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C387E45A-F25A-48D5-AD5B-A102DF6BFF0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

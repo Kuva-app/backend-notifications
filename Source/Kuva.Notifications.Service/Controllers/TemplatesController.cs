@@ -1,6 +1,7 @@
 using Kuva.Notifications.Business.Interfaces;
 using Kuva.Notifications.Entities.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kuva.Notifications.Service.Controllers;
@@ -24,7 +25,7 @@ public sealed class TemplatesController(INotificationBusiness notificationBusine
     public async Task<IActionResult> CreateAsync([FromBody] NotificationTemplateDto template, CancellationToken cancellationToken)
     {
         var created = await notificationBusiness.CreateTemplateAsync(template, cancellationToken);
-        return CreatedAtAction(nameof(GetByCodeAsync), new { code = created.Code }, created);
+        return Created(ControllerContext.HttpContext.Request.Path, created);
     }
 
     [HttpPut("{id:guid}")]

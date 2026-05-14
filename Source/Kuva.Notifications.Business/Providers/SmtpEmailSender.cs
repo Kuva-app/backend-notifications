@@ -47,16 +47,17 @@ public sealed class SmtpEmailSender(IConfiguration configuration) : INotificatio
             }
         }
 
-        using var client = new SmtpClient(host, int.TryParse(configuration["Smtp:Port"], out var port) ? port : 587)
-        {
-            EnableSsl = bool.TryParse(configuration["Smtp:EnableSsl"], out var ssl) ? ssl : true
-        };
-
+        using var client = new SmtpClient(host, int.TryParse(configuration["Smtp:Port"], out var port) ? port : 587);
+        var isSslEnabled = !bool.TryParse(configuration["Smtp:EnableSsl"], out var ssl) || ssl;
+        client.EnableSsl = isSslEnabled;
+        client.UseDefaultCredentials = false;
+        client.DeliveryMethod = SmtpDeliveryMethod.Network;
         var username = configuration["Smtp:Username"];
         var password = configuration["Smtp:Password"];
         if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
         {
-            client.Credentials = new NetworkCredential(username, password);
+            var credentials = new NetworkCredential(username, password);
+            client.Credentials = credentials;
         }
 
         try

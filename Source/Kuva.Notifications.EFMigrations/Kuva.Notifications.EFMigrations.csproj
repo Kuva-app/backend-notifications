@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Kuva.Notifications.Repository\Kuva.Notifications.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
