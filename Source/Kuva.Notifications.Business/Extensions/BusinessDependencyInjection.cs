@@ -20,6 +20,7 @@ public static class BusinessDependencyInjection
         services.AddTransient<INotificationSender, FakeEmailSender>();
         services.AddTransient<INotificationSender, SmtpEmailSender>();
         services.AddHttpClient<INotificationSender, SendGridEmailSender>();
+        services.AddTransient<INotificationSender, MailKitSender>();
 
         return services;
     }

@@ -4,5 +4,7 @@
     "sqlServer": "localhost,1433",
     "database": "KuvaNotifications",
     "provider": "Fake"
-  }
+  },
+  "version": "1",
+  "environments": []
 }
