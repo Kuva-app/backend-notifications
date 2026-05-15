@@ -141,7 +141,6 @@ dotnet ef migrations script `
     --output migration.sql
 ```
 
-
 O flag --idempotent gera um script seguro para reexecução (verifica se a migration já foi aplicada).
 
 ## Endpoints
