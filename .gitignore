@@ -68,3 +68,7 @@ FEATURES.md
 # JetBrains Rider
 .idea/
 *.DotSettings.user
+*.lscache
+
+# Migrations 
+migration.sql

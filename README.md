@@ -124,6 +124,25 @@ dotnet ef database update `
 
 A migration inicial cria as tabelas, indices e seed para provider fake e os templates `ORDER_RECEIVED` e `ORDER_READY_FOR_PICKUP`.
 
+### Gerar script SQL (para produção/DBA)
+
+```bash
+dotnet ef migrations script \
+  --project Source/Kuva.Notifications.EFMigrations \
+  --startup-project Source/Kuva.Notifications.Service \
+  --idempotent \
+  --output migration.sql
+```
+
+```powershell
+dotnet ef migrations script `
+    --project .\Source\Kuva.Notifications.EFMigrations\ `
+    --idempotent `
+    --output migration.sql
+```
+
+O flag --idempotent gera um script seguro para reexecução (verifica se a migration já foi aplicada).
+
 ## Endpoints
 
 ```http
